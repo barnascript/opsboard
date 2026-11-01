@@ -38,3 +38,5 @@
   .ob-filters input, .ob-filters select { min-width: 0; width: 100%; }
   .ob-filters label { flex: 1 1 140px; }
 }
+.shell-footer a { color: var(--ob-muted); }
+.shell-footer a:hover { color: var(--ob-text); }

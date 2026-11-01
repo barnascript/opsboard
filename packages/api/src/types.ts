@@ -5,6 +5,8 @@ export interface SalesDay {
 }
 
 export interface SalesSummary {
+  /** last day in the data; "last N days" counts back from here */
+  asOf: string;
   days: SalesDay[];
   totalRevenue: number;
   totalOrders: number;
@@ -17,9 +19,9 @@ export type CustomerTier = "gold" | "silver" | "bronze";
 
 export interface Customer {
   id: string;
-  name: string;
-  email: string;
+  country: string;
   tier: CustomerTier;
+  /** distinct orders (invoices) */
   visits: number;
   lifetimeSpend: number;
   lastVisit: string;

@@ -3,6 +3,7 @@ import { act } from "react";
 import SalesPanel from "./SalesPanel";
 
 const summary = (days: number) => ({
+  asOf: "2011-12-09",
   days: [{ date: "2026-10-31", revenue: 1000, orders: 20 }],
   totalRevenue: days * 100,
   totalOrders: 20,
@@ -20,10 +21,10 @@ beforeEach(() => {
 it("loads 30 days by default and refetches when the range changes", async () => {
   render(<SalesPanel apiBase="" />);
   expect(screen.getByRole("status")).toHaveTextContent(/loading sales/i);
-  expect(await screen.findByText("$3,000")).toBeInTheDocument();
+  expect(await screen.findByText("£3,000")).toBeInTheDocument();
 
   act(() => screen.getByRole("button", { name: "7d" }).click());
-  expect(await screen.findByText("$700")).toBeInTheDocument();
+  expect(await screen.findByText("£700")).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "7d" })).toHaveAttribute("aria-pressed", "true");
 });
 
@@ -34,5 +35,5 @@ it("shows an error with a working retry", async () => {
   render(<SalesPanel apiBase="" />);
   expect(await screen.findByRole("alert")).toHaveTextContent("nope");
   act(() => screen.getByRole("button", { name: /try again/i }).click());
-  await waitFor(() => expect(screen.getByText("$3,000")).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByText("£3,000")).toBeInTheDocument());
 });

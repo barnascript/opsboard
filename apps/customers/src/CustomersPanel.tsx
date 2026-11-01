@@ -3,11 +3,12 @@ import { createApiClient, type Customer, type CustomerTier } from "@opsboard/api
 import { Card, DataTable, ErrorState, Loading, formatInt, formatMoney, useAsync, type Column } from "@opsboard/ui";
 
 const columns: Column<Customer>[] = [
-  { key: "name", header: "Name", sortable: true },
+  { key: "id", header: "Customer", sortable: true, render: (c) => <span className="ob-mono">#{c.id}</span> },
+  { key: "country", header: "Country", sortable: true },
   { key: "tier", header: "Tier", render: (c) => <span className={`ob-badge ob-badge--${c.tier}`}>{c.tier}</span> },
-  { key: "visits", header: "Visits", numeric: true, sortable: true, render: (c) => formatInt(c.visits) },
+  { key: "visits", header: "Orders", numeric: true, sortable: true, render: (c) => formatInt(c.visits) },
   { key: "lifetimeSpend", header: "Lifetime spend", numeric: true, sortable: true, render: (c) => formatMoney(c.lifetimeSpend) },
-  { key: "lastVisit", header: "Last visit", sortable: true },
+  { key: "lastVisit", header: "Last order", sortable: true },
 ];
 
 export default function CustomersPanel({ apiBase }: { apiBase: string }) {
@@ -33,7 +34,7 @@ export default function CustomersPanel({ apiBase }: { apiBase: string }) {
               setSearch(e.target.value);
               setPage(1);
             }}
-            placeholder="Name or email"
+            placeholder="Customer ID or country"
           />
         </label>
         <label>
@@ -46,8 +47,8 @@ export default function CustomersPanel({ apiBase }: { apiBase: string }) {
             }}
           >
             <option value="">All</option>
-            <option value="gold">Gold</option>
-            <option value="silver">Silver</option>
+            <option value="gold">Gold · top 10%</option>
+            <option value="silver">Silver · next 30%</option>
             <option value="bronze">Bronze</option>
           </select>
         </label>
@@ -58,7 +59,7 @@ export default function CustomersPanel({ apiBase }: { apiBase: string }) {
       {state.status === "success" && (
         <>
           <p className="ob-muted" aria-live="polite">
-            {formatInt(state.data.total)} customers
+            {formatInt(state.data.total)} customers · sorted by lifetime spend
           </p>
           <DataTable rows={state.data.items} columns={columns} caption="Customers" />
           <nav className="ob-pager" aria-label="Customer pages">

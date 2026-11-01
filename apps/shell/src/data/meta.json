@@ -1,0 +1,13 @@
+{
+  "rawRows": 1033036,
+  "purchasesReversedByCancellation": 6402,
+  "cleanRows": 997113,
+  "source": "UCI Online Retail II (CC BY 4.0)",
+  "currency": "GBP",
+  "firstDate": "2009-12-01",
+  "lastDate": "2011-12-09",
+  "customers": 5839,
+  "orders": 39246,
+  "revenue": 19035543.82,
+  "rowsWithoutCustomer": 226761
+}

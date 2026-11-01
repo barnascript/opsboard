@@ -117,3 +117,4 @@ body {
 .ob-spinner { width: 8px; height: 8px; background: var(--ob-signal); border-radius: 50%; animation: ob-pulse 1s var(--ob-ease) infinite; }
 @keyframes ob-pulse { 50% { opacity: 0.2; } }
 @media (prefers-reduced-motion: reduce) { .ob-spinner { animation: none; } * { transition: none !important; } }
+.ob-mono { font-family: var(--ob-font-mono); font-size: 0.875rem; letter-spacing: 0.02em; }

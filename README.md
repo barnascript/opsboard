@@ -6,7 +6,7 @@ A micro-frontend operations dashboard: a **Next.js shell** that loads independen
                      ┌───────────────────────────────────────────┐
   browser ─────────► │ shell  (Next.js 16, App Router, :3000)    │
                      │  • server-renders layout + CMS content    │
-                     │  • REST API  /api/sales  /api/customers   │
+                     │  • REST API over 1M real UCI rows         │
                      │  • nonce CSP (src/proxy.ts)               │
                      │  • MF runtime: shares ONE React instance  │
                      └──────┬───────────────────────┬────────────┘
@@ -55,9 +55,31 @@ Each remote also runs on its own (`npm run dev -w @opsboard/sales`), so a team c
 
 Set `CONTENTFUL_SPACE_ID` and `CONTENTFUL_ACCESS_TOKEN` (in `apps/shell/.env.local`) and create an `announcement` content type with `title` and `body` fields. Without them, the page uses local fallback copy, and a CMS outage also falls back instead of breaking the page.
 
-## Demo data
+## Data
 
-All data is generated from a seeded PRNG (`apps/shell/src/lib/seed.ts`), so it is identical on every run and safe to publish.
+Real transactions from the [UCI Online Retail II](https://archive.ics.uci.edu/dataset/502/online+retail+ii) dataset (D. Chen, 2019, CC BY 4.0): a UK online gift wholesaler, 1 Dec 2009 to 9 Dec 2011, 1,033,036 rows. Customer IDs are anonymous numbers; there are no names or emails.
+
+`scripts/import_uci.py` aggregates the raw rows once into small JSON files under `apps/shell/src/data/`, so the API never scans a million rows per request:
+
+| Step | Rows |
+|---|---|
+| Raw (both yearly sheets, overlap de-duplicated) | 1,033,036 |
+| Purchases reversed by a matching cancellation, removed | 6,402 |
+| After also dropping cancellations, returns, zero prices, and postage/fee/adjustment lines | 997,113 |
+
+**The trap worth knowing:** dropping cancellation rows alone is not enough. The purchase they reversed stays in. On 9 Dec 2011 a single 80,995-unit order (about £168k) was placed and cancelled the same day; naive cleaning shows that day at £198k, the real figure is £29.6k. The importer matches each cancellation to the latest earlier purchase with the same customer, product and quantity, and removes both. A unit test guards it.
+
+Other honest details: the shop does not trade on Saturdays, so those days are real zeros in the chart; "last N days" counts back from the last day in the data; tiers are spend percentiles (gold top 10%, silver next 30%).
+
+Rebuild the data:
+
+```bash
+mkdir -p data/raw
+curl -L -o data/raw/online_retail_ii.zip https://archive.ics.uci.edu/static/public/502/online+retail+ii.zip
+unzip -o data/raw/online_retail_ii.zip -d data/raw
+pip install pandas openpyxl
+python3 -I scripts/import_uci.py data/raw/online_retail_II.xlsx apps/shell/src/data
+```
 
 ## Next steps
 

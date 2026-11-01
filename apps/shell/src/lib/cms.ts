@@ -9,8 +9,8 @@ export interface Announcement {
 const FALLBACK: Announcement[] = [
   {
     id: "local-1",
-    title: "Welcome to Opsboard",
-    body: "This banner comes from Contentful when CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN are set, and from local fallback content otherwise.",
+    title: "Real data, frozen in time",
+    body: "Figures are real UCI Online Retail II transactions (Dec 2009 to Dec 2011), so \"last 30 days\" ends on 9 Dec 2011. This notice comes from Contentful when CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN are set.",
   },
 ];
 

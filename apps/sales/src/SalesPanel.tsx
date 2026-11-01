@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createApiClient } from "@opsboard/api";
-import { BarChart, Card, ErrorState, Loading, StatTile, formatInt, formatMoney, useAsync } from "@opsboard/ui";
+import { BarChart, Card, ErrorState, Loading, StatTile, formatDate, formatInt, formatMoney, useAsync } from "@opsboard/ui";
 
 const RANGES = [7, 30, 90] as const;
 
@@ -25,13 +25,16 @@ export default function SalesPanel({ apiBase }: { apiBase: string }) {
       {state.status === "error" && <ErrorState error={state.error} onRetry={retry} />}
       {state.status === "success" && (
         <>
+          <p className="ob-muted">
+            Last {days} days to {formatDate(state.data.asOf)} · closed Saturdays show as zero
+          </p>
           <div className="ob-stats">
             <StatTile label="Revenue" value={formatMoney(state.data.totalRevenue)} change={state.data.changeVsPrevious} />
             <StatTile label="Orders" value={formatInt(state.data.totalOrders)} />
             <StatTile label="Avg order" value={formatMoney(state.data.avgOrderValue)} />
           </div>
           <BarChart
-            title={`Daily revenue, last ${days} days`}
+            title={`Daily revenue, last ${days} days to ${formatDate(state.data.asOf)}`}
             data={state.data.days.map((d) => ({ label: d.date, value: d.revenue }))}
             format={formatMoney}
           />

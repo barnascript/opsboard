@@ -7,3 +7,4 @@ cypress/screenshots
 .env*.local
 *.tsbuildinfo
 next-env.d.ts
+data/raw

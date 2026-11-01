@@ -44,7 +44,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <footer className="shell-footer ob-label">
           <span>Next.js shell</span>
           <span>Module Federation</span>
-          <span>Seeded demo data</span>
+          <span>
+            Data:{" "}
+            <a href="https://archive.ics.uci.edu/dataset/502/online+retail+ii">UCI Online Retail II</a>, D. Chen 2019, CC BY 4.0
+          </span>
         </footer>
       </body>
     </html>
