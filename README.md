@@ -61,7 +61,7 @@ Each remote also runs on its own (`npm run dev -w @opsboard/sales`), so a team c
 | `opsboard-sales` | Static site (remote) | `apps/sales/**` or `packages/**` changes |
 | `opsboard-customers` | Static site (remote) | `apps/customers/**` or `packages/**` changes |
 
-The shell learns each remote's hostname from the Blueprint (`fromService`), so nothing is hard-coded. Remote builds use `assetPrefix: "auto"`: one artifact runs on any host. The shell is on Render's free plan, so the first request after 15 idle minutes takes about a minute while it wakes up.
+The shell gets each remote's public URL from `NEXT_PUBLIC_*_URL` in the Blueprint. (Not `fromService` → `host`: on Render that is the internal private-network hostname, which a browser cannot reach.) Remote builds use `assetPrefix: "auto"`: one artifact runs on any host. The shell is on Render's free plan, so the first request after 15 idle minutes takes about a minute while it wakes up.
 
 ## Contentful
 

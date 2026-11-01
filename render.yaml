@@ -57,20 +57,16 @@ services:
     startCommand: npm run start -w @opsboard/shell
     healthCheckPath: /api/sales?days=7
     buildFilter:
-      paths: ["apps/shell/**", "packages/**", "package-lock.json"]
+      paths: ["apps/shell/**", "packages/**", "package-lock.json", "render.yaml"]
     envVars:
       - key: CYPRESS_INSTALL_BINARY
         value: "0"
       - key: NODE_VERSION
         value: "22"
-      # Render hands over bare hostnames; src/lib/remotes.ts adds https://
+      # Public URLs, set explicitly: fromService "host" resolves to Render's
+      # internal private-network hostname, which a browser cannot reach.
+      # NEXT_PUBLIC_* is inlined at build time, so changing these rebuilds the shell.
       - key: NEXT_PUBLIC_SALES_URL
-        fromService:
-          type: web
-          name: opsboard-sales
-          property: host
+        value: https://opsboard-sales.onrender.com
       - key: NEXT_PUBLIC_CUSTOMERS_URL
-        fromService:
-          type: web
-          name: opsboard-customers
-          property: host
+        value: https://opsboard-customers.onrender.com
