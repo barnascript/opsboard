@@ -51,6 +51,18 @@ Each remote also runs on its own (`npm run dev -w @opsboard/sales`), so a team c
 
 **Performance / SSR.** The shell and CMS content are server-rendered. Remotes are client-only (`ssr: false`) and load in parallel. CMS results are cached for 5 minutes, and API responses send `stale-while-revalidate`.
 
+## Deploy (Render)
+
+`render.yaml` is a Render Blueprint: **Dashboard → New → Blueprint → this repo** creates three services:
+
+| Service | Type | Rebuilds when |
+|---|---|---|
+| `opsboard` | Node web service (the Next.js shell) | `apps/shell/**` or `packages/**` changes |
+| `opsboard-sales` | Static site (remote) | `apps/sales/**` or `packages/**` changes |
+| `opsboard-customers` | Static site (remote) | `apps/customers/**` or `packages/**` changes |
+
+The shell learns each remote's hostname from the Blueprint (`fromService`), so nothing is hard-coded. Remote builds use `assetPrefix: "auto"`: one artifact runs on any host. The shell is on Render's free plan, so the first request after 15 idle minutes takes about a minute while it wakes up.
+
 ## Contentful
 
 Set `CONTENTFUL_SPACE_ID` and `CONTENTFUL_ACCESS_TOKEN` (in `apps/shell/.env.local`) and create an `announcement` content type with `title` and `body` fields. Without them, the page uses local fallback copy, and a CMS outage also falls back instead of breaking the page.

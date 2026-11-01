@@ -1,0 +1,76 @@
+# Render Blueprint: Dashboard -> New -> Blueprint -> pick this repo.
+# Three services, each deployed on its own; buildFilter means a change to one
+# remote redeploys only that remote, never the shell.
+services:
+  - type: web
+    runtime: static
+    name: opsboard-sales
+    buildCommand: npm ci && npm run build -w @opsboard/sales
+    staticPublishPath: apps/sales/dist
+    buildFilter:
+      paths: ["apps/sales/**", "packages/**", "package-lock.json"]
+    headers:
+      - path: /*
+        name: Access-Control-Allow-Origin
+        value: "*"
+      - path: /mf-manifest.json
+        name: Cache-Control
+        value: no-cache
+      - path: /static/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      - key: CYPRESS_INSTALL_BINARY
+        value: "0"
+      - key: NODE_VERSION
+        value: "22"
+
+  - type: web
+    runtime: static
+    name: opsboard-customers
+    buildCommand: npm ci && npm run build -w @opsboard/customers
+    staticPublishPath: apps/customers/dist
+    buildFilter:
+      paths: ["apps/customers/**", "packages/**", "package-lock.json"]
+    headers:
+      - path: /*
+        name: Access-Control-Allow-Origin
+        value: "*"
+      - path: /mf-manifest.json
+        name: Cache-Control
+        value: no-cache
+      - path: /static/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      - key: CYPRESS_INSTALL_BINARY
+        value: "0"
+      - key: NODE_VERSION
+        value: "22"
+
+  - type: web
+    runtime: node
+    name: opsboard
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci && npm run build -w @opsboard/shell
+    startCommand: npm run start -w @opsboard/shell
+    healthCheckPath: /api/sales?days=7
+    buildFilter:
+      paths: ["apps/shell/**", "packages/**", "package-lock.json"]
+    envVars:
+      - key: CYPRESS_INSTALL_BINARY
+        value: "0"
+      - key: NODE_VERSION
+        value: "22"
+      # Render hands over bare hostnames; src/lib/remotes.ts adds https://
+      - key: NEXT_PUBLIC_SALES_URL
+        fromService:
+          type: web
+          name: opsboard-sales
+          property: host
+      - key: NEXT_PUBLIC_CUSTOMERS_URL
+        fromService:
+          type: web
+          name: opsboard-customers
+          property: host
