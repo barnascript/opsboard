@@ -20,7 +20,7 @@ export default function SalesPanel({ apiBase }: { apiBase: string }) {
   );
 
   return (
-    <Card title="Sales" actions={rangePicker}>
+    <Card title="Sales" index="Module 01" actions={rangePicker}>
       {state.status === "loading" && <Loading label="Loading sales" />}
       {state.status === "error" && <ErrorState error={state.error} onRetry={retry} />}
       {state.status === "success" && (

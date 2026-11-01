@@ -22,7 +22,7 @@ export default function CustomersPanel({ apiBase }: { apiBase: string }) {
   const totalPages = state.status === "success" ? Math.max(1, Math.ceil(state.data.total / state.data.pageSize)) : 1;
 
   return (
-    <Card title="Customers">
+    <Card title="Customers" index="Module 02">
       <form className="ob-filters" role="search" onSubmit={(e) => e.preventDefault()}>
         <label>
           Search
