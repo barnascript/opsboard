@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "concurrently -k -n shell,sales,customers \"npm run dev -w @opsboard/shell\" \"npm run dev -w @opsboard/sales\" \"npm run dev -w @opsboard/customers\"",
     "build": "npm run build -w @opsboard/sales -w @opsboard/customers && npm run build -w @opsboard/shell",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p cypress",
     "test": "jest",
     "start:all": "concurrently -k -n shell,sales,customers \"npm run start -w @opsboard/shell\" \"npm run preview -w @opsboard/sales\" \"npm run preview -w @opsboard/customers\"",
     "e2e": "start-server-and-test start:all \"http://localhost:3000|http://localhost:3001/mf-manifest.json|http://localhost:3002/mf-manifest.json\" \"cypress run\"",

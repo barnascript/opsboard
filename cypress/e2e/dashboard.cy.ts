@@ -8,7 +8,8 @@ describe("Overview dashboard", () => {
     cy.findHeading("Sales");
     cy.findHeading("Customers");
     cy.contains("Revenue").should("be.visible");
-    cy.get("table tbody tr").should("have.length", 20);
+    // .ob-table: the chart also renders a hidden data table for screen readers
+    cy.get(".ob-table tbody tr").should("have.length", 20);
   });
 
   it("changes the sales range", () => {
@@ -20,7 +21,8 @@ describe("Overview dashboard", () => {
   it("filters, searches and pages customers", () => {
     cy.findHeading("Customers");
     cy.get("select").select("gold");
-    cy.get("tbody .ob-badge").each(($b) => expect($b.text()).to.eq("gold"));
+    // should() retries until the refetched rows arrive; each() would check stale rows once
+    cy.get(".ob-table tbody .ob-badge").should(($b) => expect([...$b].map((b) => b.textContent)).to.satisfy((t: string[]) => t.length > 0 && t.every((x) => x === "gold")));
     cy.get("input[type=search]").type("zzzz-no-match");
     cy.contains("0 customers");
     cy.get("input[type=search]").clear();
@@ -35,7 +37,7 @@ describe("Overview dashboard", () => {
 
   it("has no serious accessibility violations", () => {
     cy.findHeading("Customers");
-    cy.get("tbody tr").should("exist");
+    cy.get(".ob-table tbody tr").should("exist");
     cy.injectAxe();
     cy.checkA11y(undefined, { includedImpacts: ["critical", "serious"] }, logViolations);
   });
@@ -52,7 +54,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
-      findHeading(name: string): Chainable<JQuery<HTMLElement>>;
+      findHeading(name: string): Chainable<JQuery<HTMLHeadingElement>>;
     }
   }
 }
