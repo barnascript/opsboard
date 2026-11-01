@@ -1,0 +1,80 @@
+:root {
+  --ob-bg: #f6f7f9;
+  --ob-surface: #ffffff;
+  --ob-text: #16181d;
+  --ob-muted: #5b6270;
+  --ob-border: #e2e5ea;
+  --ob-accent: #2457d6;
+  --ob-accent-soft: #e8eefc;
+  --ob-good: #127a3e;
+  --ob-bad: #b42318;
+  --ob-radius: 10px;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ob-bg: #0f1115;
+    --ob-surface: #171a21;
+    --ob-text: #e9ecf1;
+    --ob-muted: #9aa3b2;
+    --ob-border: #2a2f3a;
+    --ob-accent: #7ea2ff;
+    --ob-accent-soft: #1d2740;
+    --ob-good: #4ccb7f;
+    --ob-bad: #ff7b6e;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ob-bg); color: var(--ob-text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+:focus-visible { outline: 2px solid var(--ob-accent); outline-offset: 2px; }
+.ob-visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.ob-standalone { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+
+.ob-card { background: var(--ob-surface); border: 1px solid var(--ob-border); border-radius: var(--ob-radius); padding: 16px 20px; }
+.ob-card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.ob-card__head h2 { font-size: 1.05rem; margin: 0; }
+
+.ob-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.ob-stat { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 8px; background: var(--ob-accent-soft); }
+.ob-stat__label { color: var(--ob-muted); font-size: .85rem; }
+.ob-stat__value { font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+.ob-stat__change { font-size: .85rem; font-variant-numeric: tabular-nums; }
+.ob-stat__change.is-good { color: var(--ob-good); }
+.ob-stat__change.is-bad { color: var(--ob-bad); }
+
+.ob-chart { margin: 0; }
+.ob-chart svg { width: 100%; height: 160px; display: block; }
+.ob-chart__bar { fill: var(--ob-accent); }
+.ob-chart__bar:hover { opacity: .75; }
+
+.ob-segmented { display: inline-flex; border: 1px solid var(--ob-border); border-radius: 8px; overflow: hidden; }
+.ob-segmented button { border: 0; background: transparent; color: inherit; padding: 4px 12px; cursor: pointer; font: inherit; }
+.ob-segmented button[aria-pressed="true"] { background: var(--ob-accent); color: #fff; }
+
+.ob-btn { border: 1px solid var(--ob-border); background: var(--ob-surface); color: inherit; border-radius: 8px; padding: 6px 14px; cursor: pointer; font: inherit; }
+.ob-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.ob-filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.ob-filters label { display: flex; flex-direction: column; font-size: .85rem; color: var(--ob-muted); gap: 4px; }
+.ob-filters input, .ob-filters select { font: inherit; color: var(--ob-text); background: var(--ob-surface); border: 1px solid var(--ob-border); border-radius: 8px; padding: 6px 10px; min-width: 180px; }
+
+.ob-table-wrap { overflow-x: auto; }
+.ob-table { width: 100%; border-collapse: collapse; }
+.ob-table th, .ob-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--ob-border); white-space: nowrap; }
+.ob-table .is-num { text-align: right; font-variant-numeric: tabular-nums; }
+.ob-table th button { all: unset; cursor: pointer; font-weight: 600; }
+.ob-table th button:focus-visible { outline: 2px solid var(--ob-accent); }
+
+.ob-badge { padding: 1px 8px; border-radius: 999px; font-size: .8rem; text-transform: capitalize; border: 1px solid currentColor; }
+.ob-badge--gold { color: #8a6100; }
+.ob-badge--silver { color: var(--ob-muted); }
+.ob-badge--bronze { color: #9a4a1c; }
+@media (prefers-color-scheme: dark) { .ob-badge--gold { color: #f2c14e; } .ob-badge--bronze { color: #e59866; } }
+
+.ob-pager { display: flex; align-items: center; gap: 12px; justify-content: flex-end; margin-top: 12px; }
+.ob-muted { color: var(--ob-muted); margin: 4px 0; }
+.ob-state { display: flex; align-items: center; gap: 10px; padding: 24px 0; color: var(--ob-muted); }
+.ob-state--error { flex-direction: column; align-items: flex-start; color: var(--ob-bad); }
+.ob-spinner { width: 16px; height: 16px; border: 2px solid var(--ob-border); border-top-color: var(--ob-accent); border-radius: 50%; animation: ob-spin .8s linear infinite; }
+@keyframes ob-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ob-spinner { animation: none; } }

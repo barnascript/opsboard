@@ -1,0 +1,9 @@
+node_modules
+.next
+dist
+coverage
+cypress/videos
+cypress/screenshots
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
