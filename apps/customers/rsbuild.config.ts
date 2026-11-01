@@ -3,8 +3,9 @@ import { pluginReact } from "@rsbuild/plugin-react";
 import { pluginModuleFederation } from "@module-federation/rsbuild-plugin";
 
 const port = 3002;
-// where the built files are served from; override per environment in CI/CD
-const publicUrl = process.env.PUBLIC_URL ?? `http://localhost:${port}/`;
+// dev serves from localhost; a build resolves its own URL at runtime ("auto"),
+// so one artifact works on any host without a rebuild per environment
+const devUrl = `http://localhost:${port}/`;
 
 export default defineConfig({
   plugins: [
@@ -22,6 +23,6 @@ export default defineConfig({
   ],
   html: { title: "customers (standalone)" },
   server: { port, headers: { "Access-Control-Allow-Origin": "*" } },
-  dev: { assetPrefix: publicUrl },
-  output: { assetPrefix: publicUrl },
+  dev: { assetPrefix: devUrl },
+  output: { assetPrefix: "auto" },
 });
