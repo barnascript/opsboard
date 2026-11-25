@@ -1,7 +1,6 @@
 # Opsboard
 
-**Live:** https://opsboard-4r0q.onrender.com (free plan: the first visit after 15 idle minutes takes about a minute to wake up)
-Remotes: [opsboard-sales](https://opsboard-sales.onrender.com/mf-manifest.json) · [opsboard-customers](https://opsboard-customers.onrender.com/mf-manifest.json)
+To try it, [run it on your machine](#run-it), or [deploy your own copy to Render](#deploy-render) from the Blueprint in this repo.
 
 A micro-frontend operations dashboard: a **Next.js shell** that loads independently built and deployed **React remotes** at runtime through **Module Federation**, with a typed REST API, Contentful-driven content, unit and end-to-end tests, and CI.
 
